@@ -41,6 +41,32 @@ public class UserFileController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserFileController.class);
 
+	/**
+	 * returns response code 200, true
+	 * prints the username who is logged in, using the Authentication passed from spring security
+	 * @param auth
+	 * @return
+	 */
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(Authentication auth) {
+
+		logger.info("logged in user:" + auth.getName());
+		return ResponseEntity.ok().body(true);
+
+	}
+
+	
+	
+	/**
+	 * Controller method that orchestrates: 
+	 * 1) converting the file content to List of users
+	 * 2) validating file data
+	 * 3) loading the data in memory database
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	@PostMapping("/users")
 	public ResponseEntity<?> handleUserFile(@RequestParam("file") MultipartFile file) throws Exception {
 
@@ -71,11 +97,17 @@ public class UserFileController {
 
 	}
 
-	private ResponseEntity<?> handleUserList( List<User> userList) {
+	/**
+	 * private method that handles validation, persistence
+	 * @param userList
+	 * @return
+	 */
+	
+	public  ResponseEntity<?> handleUserList( List<User> userList) {
 		logger.info(userList.toString());
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 	      Validator validator = factory.getValidator();
-	      
+
 	      Set<ConstraintViolation<User>> errors = userList.stream()
 	    		  								.map(item -> validator.validate(item))
 	    		  								.flatMap(s -> s.stream()).collect(Collectors.toSet());
@@ -94,12 +126,5 @@ public class UserFileController {
 		return ResponseEntity.status(HttpStatus.OK).body(userList);
 	}
 	
-	@PostMapping("/login")
-	public ResponseEntity<?> login(Authentication auth) {
-
-		logger.info("logged in user:" + auth.getName());
-		return ResponseEntity.ok().body(true);
-
-	}
-
+	
 }

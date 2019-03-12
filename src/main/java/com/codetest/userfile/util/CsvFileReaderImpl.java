@@ -16,6 +16,9 @@ public class CsvFileReaderImpl implements FileReader {
 
 	private static final Logger logger = LoggerFactory.getLogger(CsvFileReaderImpl.class);
 
+	/**
+	 * a generic method that  accepts type and byte array and converts byte array to List of type passed
+	 */
 	@Override
 	public <T> List<T> loadObjectList(Class<T> type, byte[] bytes) {
 

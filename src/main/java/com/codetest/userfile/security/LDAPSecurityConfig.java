@@ -1,6 +1,5 @@
 package com.codetest.userfile.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,20 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.LdapShaPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
 public class LDAPSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-@Autowired
-AuthenticationEntryPoint authenticationEntryPoint;
-
 @Value("${ldapUrl}")
 private String ldapUrl;
 
-
+/**
+ * configuring authenication manager to integrate with LDAP for authentication
+ */
 @Override
 public void configure(AuthenticationManagerBuilder auth) throws Exception {
 	auth.ldapAuthentication()
@@ -37,7 +34,10 @@ public void configure(AuthenticationManagerBuilder auth) throws Exception {
 				.passwordAttribute("userPassword");
 }
 
-
+/**
+ * configuring spring security for urls matching  /users and /login to use http basic authentication
+ * and make session policy stateless
+ */
 	protected void configure(HttpSecurity http) throws Exception {
         http.csrf()
                 .disable()

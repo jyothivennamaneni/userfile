@@ -1,9 +1,13 @@
 package com.codetest.userfile.util;
 
-
+/**
+ * 
+ * @author jyothivennamaneni
+ * Factory class that has a method to create FileReader type based on FileType input
+ */
 public class FileReaderFactory {
 	public enum FileType{	
-		CSV("csv");//,XSL("xsl");
+		CSV("csv");//,XSL("xsl"); currently only one type implemented but can easily be enhanced to include other types
 		
 		private final String type;
 		
